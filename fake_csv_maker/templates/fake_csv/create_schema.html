@@ -1,0 +1,26 @@
+{% extends "base/base_generic.html" %}
+
+{% block content %}
+    <h2>New schema</h2>
+    <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <h2>Schema columns:</h2>
+    {{ formset.management_form }}
+    {% for form in formset.forms %}
+        {{ form.as_p }}
+    {% endfor %}
+    <button type="button" class="add-row">Add column</button>
+    <button type="submit">Save</button>
+    </form>
+    <script>
+    $(document).ready(function() {
+        $('.add-row').click(function() {
+        var formCount = parseInt($('#id_form-TOTAL_FORMS').val());
+        var row = $('.empty-form').html().replace(/__prefix__/g, formCount);
+        $('.formset').append(row);
+        $('#id_form-TOTAL_FORMS').val(formCount + 1);
+        });
+    });
+    </script>
+{% endblock %}

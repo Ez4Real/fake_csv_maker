@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
+    <title>{{title}}</title>
+</head>
+<body>
+
+
+<header>
+    {% include 'base/header/header.html' %}
+</header>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+</body>
+
+</html>
