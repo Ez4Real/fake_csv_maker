@@ -3,6 +3,7 @@
 *.pyc
 __pycache__
 media
+staticfiles
 
 __pycache__/
 *.py[cod]
