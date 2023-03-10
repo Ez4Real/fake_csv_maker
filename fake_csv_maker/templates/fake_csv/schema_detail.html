@@ -1,0 +1,85 @@
+{% extends "base/base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container pl-16">
+
+    <div class="flex items-end justify-between py-5 mb-4 w-1/4">
+        <span class="font-semibold text-2xl text-dark">Sample schema</span>
+        <a href="#" class="text-blue mr-16">Edit scheme</a>
+    </div>
+
+    <table>
+        <thead>
+          <tr>
+            <th class="schemaDetail-tab-header pr-20">#</th>
+            <th class="schemaDetail-tab-header pr-40">Column name</th>
+            <th class="schemaDetail-tab-header pr-52">Column type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for column in columns %}
+            <tr>
+              <td class="schemaDetail-tab-header">{{ forloop.counter }}</td>
+              <td class="schemaDetail-tab-border">{{ column.name }}</td>
+              <td class="schemaDetail-tab-border">{{ column.type }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="flex items-center justify-between py-6 mb-4 max-w-[1010px]">
+        <span class="font-semibold text-2xl text-dark">Data sets</span>
+        
+        <form method="post" id="generate-data-form">
+            {% csrf_token %}
+            {{ form }}
+                
+            <button type="submit" class="green-btn">Generate data</button>
+        </form>
+    </div>
+
+    {% if datasets %}
+    <table>
+        <thead>
+          <tr>
+            <th class="schemas-tab-header pr-20">#</th>
+            <th class="schemas-tab-header pr-60">Created</th>
+            <th class="schemas-tab-header pr-56">Status</th>
+            <th class="schemas-tab-header pr-56">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for dataset in datasets %}
+            <tr>
+              <td class="schemas-tab-header">{{ forloop.counter }}</td>
+              <td class="schemas-tab-border">{{ dataset.created|date:"Y-m-d" }}</td>
+              <td class="schemas-tab-border">
+                <span class="{% if dataset.status == 'Ready' %}status-ready{% else %}status-processing{% endif %}">
+                    {{ dataset.status }}
+                </span>
+            </td>
+              <td class="schemas-tab-border">
+                {% if dataset.status == 'Ready' %}
+                <a href="#" class="text-blue">Download</a>
+                {% endif %}
+              </td >
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+
+    <h2 class="border border-red rounded-md text-2xl text-center mt-8 mb-4 w-[711.59px] p-3">
+        You haven't generated any dataset yet.
+    </h2>
+
+    {% endif %}
+
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static '/js/requests/generateDatasetReq.js' %}"></script>
+{% endblock %}

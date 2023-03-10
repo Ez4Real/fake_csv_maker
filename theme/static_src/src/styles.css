@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .green-btn {
+      @apply rounded bg-green border border-green text-white w-32 h-10 text-center leading-9 ml-auto;
+    }
+    .base-field {
+      @apply border border-fgray rounded-md;
+    }
+    .schemas-tab-header{
+      @apply font-bold border border-vlgray py-3 px-4 text-left;
+    }
+    .schemas-tab-border{
+      @apply border border-vlgray px-4 pr-8 text-left;
+    }
+    .schemaDetail-tab-header{
+      @apply font-bold border border-vlgray py-1.5 px-4 text-left;
+    }
+    .schemaDetail-tab-border{
+      @apply border border-vlgray py-1.5 px-4 pr-8 text-left;
+    }
+    .status-processing{
+      @apply font-bold text-xs leading-6 rounded w-20 h-6 bg-bgray inline-block text-center text-white align-middle;
+    }
+    .status-ready{
+      @apply font-bold text-xs leading-6 rounded w-14 h-6 bg-green inline-block text-center text-white align-middle;
+    }
+}

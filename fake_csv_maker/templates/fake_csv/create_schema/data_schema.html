@@ -1,0 +1,66 @@
+<form method="post">
+    <h2 class="font-medium text-2xl">New schema</h2>
+    <button type="submit" class="rounded bg-blue text-white w-20 h-10">Submit</button>
+    {% csrf_token %}
+    
+    <!-- {{ form.as_p }} -->
+
+    <p>
+        <label for="{{ form.name.id_for_label }}">
+          {{ form.name.label }}
+        </label>
+        {{ form.name }}
+    </p>
+    <p>
+        <label for="{{ form.column_separator.id_for_label }}">
+          {{ form.column_separator.label }}
+        </label>
+        {{ form.column_separator }}
+    </p>
+    <p>
+        <label for="{{ form.string_character.id_for_label }}">
+          {{ form.string_character.label }}
+        </label>
+        {{ form.string_character }}
+    </p>
+
+    <h2 class="font-medium text-2xl">Schema columns</h2>
+    <!-- <table class="table">
+      {{ formset.management_form }}
+      <input
+        type="hidden"
+        name="{{ formset.prefix }}-DELETE"
+        id="{{ formset.prefix }}-DELETE"
+        value=""
+      >
+
+      <thead>
+        <tr>
+          <th>Column Name</th>
+          <th>Type</th>
+          <th class="from-header">From</th>
+          <th class="to-header">To</th>
+          <th>Order</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="column-formset-body">
+        {% for form in formset.forms %}
+          <tr class="{% cycle 'row1' 'row2' %}">
+            <td>{{ form.name }}</td>
+            <td>{{ form.type }}</td>
+            <td class="from">{{ form.range_start }}</td>
+            <td class="to">{{ form.range_end }}</td>
+            <td>{{ form.order }}</td>
+            <td><button type="button" class="w-16 h-10 text-red" id="delete-row-btn">Delete</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table> -->
+
+      {% for form in formset.forms %}
+          {% include 'fake_csv/create_schema/schema_column.html' %}
+      {% endfor %}
+      
+    <button type="button" class="rounded bg-blue text-white w-32 h-10" id="add-column-btn">Add Column</button>
+  </form>

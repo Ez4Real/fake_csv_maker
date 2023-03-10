@@ -1,22 +1,31 @@
 <!DOCTYPE html>
-{% load i18n %}
+
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FakeCSV page designed to create dummy data schema">
+    <title>FakeCSV</title>
+
     {% load static %}
-    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
-    <title>{{title}}</title>
+    {% load tailwind_tags %}
+    {% tailwind_css %}
+
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
 </head>
-<body>
 
-
-<header>
+<body class="font-helvetica">
+  <header>
     {% include 'base/header/header.html' %}
-</header>
-<main>
+  </header>
+
+  <main>
     {% block content %}
     {% endblock %}
-</main>
+  </main>
+
+  {% block scripts %}
+  {% endblock %}
 
 </body>
-
 </html>

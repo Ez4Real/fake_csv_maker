@@ -20,4 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authentication.urls')),
     path('', include('fake_csv_maker.urls')),
+    
+    path('__reload__/', include('django_browser_reload.urls')),
 ]

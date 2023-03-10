@@ -1,8 +1,17 @@
-<nav>
-    <ul>
-        <li><a href="{% url 'create_schema' %}">FakeCSV</a></li>
-        <li><a href="{% url 'list_schemas' %}">Schemas</a></li>
-        Hello, {{ current_user }}
-        <li><a href="{% url 'logout' %}">Logout</a></li>
+<nav class="w-full h-12 top-0 bg-gray rounded flex">
+    <ul class="flex justify-between items-center w-full px-16">
+      <div class="inline-flex items-center">
+        <li>
+          <a href="{% url 'create_schema' %}" class="font-medium text-xl opacity-80">FakeCSV</a>
+        </li>
+        <li class="px-20">
+          <a href="{% url 'schemas_list' %}" class="opacity-80">Schemas</a>
+        </li>
+      </div>
+  
+      <li class="flex items-center mr-16 ">
+        <span class="mr-4 opacity-30">Hello, <span class="font-bold">{{ current_user }}</span></span>
+        <a href="{% url 'logout' %}" class="opacity-30">Logout</a>
+      </li>
     </ul>
 </nav>

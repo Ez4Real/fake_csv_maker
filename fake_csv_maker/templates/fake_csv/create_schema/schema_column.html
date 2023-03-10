@@ -1,0 +1,35 @@
+<div class="empty-form flex flex-wrap -mx-3 mb-3">
+  <div class="md:w-1/6 px-3 mb-2">
+    <label class="block not-italic font-normal text-base leading-6 mb-2" for="{{ form.name.id_for_label }}">
+      {{ form.name.label }}
+    </label>
+    {{ form.name }}
+  </div>
+  <div class="md:w-1/6 px-3">
+    <label class="block not-italic font-normal text-base leading-6 mb-2" for="{{ form.type.id_for_label }}">
+      {{ form.type.label }}
+    </label>
+    {{ form.type }}
+  </div>
+  <div class="md:w-1/6 px-3">
+    <label class="block not-italic font-normal text-base leading-6 mb-2" for="{{ form.range_start.id_for_label }}">
+      {{ form.range_start.label }}
+    </label>
+    {{ form.range_start }}
+  </div>
+  <div class="md:w-1/6">
+    <label class="block not-italic font-normal text-base leading-6 mb-2" for="{{ form.range_end.id_for_label }}">
+      {{ form.range_end.label }}
+    </label>
+    {{ form.range_end }}
+  </div>
+  <div class="md:w-1/6">
+    <label class="block not-italic font-normal text-base leading-6 mb-2" for="{{ form.order.id_for_label }}">
+      {{ form.order.label }}
+    </label>
+    {{ form.order }}
+  </div>
+  <div class="md:w-1/6 pt-10">
+    <button type="button" class="font-normal text-base leading-5 text-red" id="delete-row-btn">Delete</button>
+  </div>
+</div>

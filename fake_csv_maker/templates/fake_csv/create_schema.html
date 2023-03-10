@@ -1,26 +1,90 @@
 {% extends "base/base_generic.html" %}
+{% load static %}
 
 {% block content %}
-    <h2>New schema</h2>
-    <form method="POST">
+<div class="container py-6 pl-16">
+
+  <form method="post">
     {% csrf_token %}
+    
+
+    <div class="flex mb-4 w-11/12">
+      <h2 class="font-medium text-2xl">New schema</h2>
+      <button type="submit" class="rounded bg-blue text-white w-20 h-10 ml-auto">Submit</button>
+  </div>
+
+    <!-- <p>
+        <label for="{{ form.name.id_for_label }}">
+          {{ form.name.label }}
+        </label>
+        {{ form.name }}
+    </p>
+    <p>
+        <label for="{{ form.column_separator.id_for_label }}">
+          {{ form.column_separator.label }}
+        </label>
+        {{ form.column_separator }}
+    </p>
+    <p>
+        <label for="{{ form.string_character.id_for_label }}">
+          {{ form.string_character.label }}
+        </label>
+        {{ form.string_character }}
+    </p> -->
     {{ form.as_p }}
-    <h2>Schema columns:</h2>
+
+    <h2 class="font-medium text-2xl py-5">Schema columns</h2>
+
     {{ formset.management_form }}
     {% for form in formset.forms %}
-        {{ form.as_p }}
+      <div class="border border-lgray rounded-md p-4">
+        <div class="initial-form column-form flex flex-wrap -mx-3 mb-3">
+          <div class="md:w-1/6 px-3 mb-2">
+            <label class="block not-italic mb-2" for="{{ form.name.id_for_label }}">
+              {{ form.name.label }}
+            </label>
+            {{ form.name }}
+          </div>
+          <div class="md:w-1/6 px-3">
+            <label class="block not-italic mb-2" for="{{ form.type.id_for_label }}">
+              {{ form.type.label }}
+            </label>
+            {{ form.type }}
+          </div>
+          <div class="from-field-div md:w-1/6 px-3">
+            <label class="block not-italic mb-2" for="{{ form.range_start.id_for_label }}">
+              {{ form.range_start.label }}
+            </label>
+            {{ form.range_start }}
+          </div>
+          <div class="to-field-div md:w-1/6">
+            <label class="block not-italic mb-2" for="{{ form.range_end.id_for_label }}">
+              {{ form.range_end.label }}
+            </label>
+            {{ form.range_end }}
+          </div>
+          <div class="sticky md:w-1/6">
+            <label class="block not-italic mb-2" for="{{ form.order.id_for_label }}">
+              {{ form.order.label }}
+            </label>
+            {{ form.order }}
+          </div>
+          
+          <div class="md:w-1/6 pt-10">
+            <button type="button" class="sticky text-red" id="delete-column-btn">Delete</button>
+          </div>
+        </div>
+        
+        <button type="button" class="rounded bg-blue text-white w-32 h-10" name="add-column-btn">Add Column</button>
+      </div>
     {% endfor %}
-    <button type="button" class="add-row">Add column</button>
-    <button type="submit">Save</button>
-    </form>
-    <script>
-    $(document).ready(function() {
-        $('.add-row').click(function() {
-        var formCount = parseInt($('#id_form-TOTAL_FORMS').val());
-        var row = $('.empty-form').html().replace(/__prefix__/g, formCount);
-        $('.formset').append(row);
-        $('#id_form-TOTAL_FORMS').val(formCount + 1);
-        });
-    });
-    </script>
+      
+  </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static '/js/createSchema/updateFormColumns.js' %}"></script>
+<script src="{% static '/js/createSchema/toggleRangeFields.js' %}"></script>
 {% endblock %}

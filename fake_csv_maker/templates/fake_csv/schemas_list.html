@@ -1,0 +1,41 @@
+{% extends "base/base_generic.html" %}
+
+{% block content %}
+<div class="container py-6 pl-16">
+    <div class="flex mb-4 w-[988.35px]">
+        <span class="font-medium text-2xl text-dark">Data schemas</span>
+        <a href="{% url 'create_schema' %}" class="rounded bg-green border border-green text-white w-32 h-10 text-center leading-9 ml-auto">New schema</a>
+    </div>
+    
+    <table>
+        <thead>
+          <tr>
+            <th class="schemas-tab-header pr-20">#</th>
+            <th class="schemas-tab-header pr-60">Title</th>
+            <th class="schemas-tab-header pr-52">Modified</th>
+            <th class="schemas-tab-header pr-56">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for schema in schemas %}
+            <tr>
+              <td class="schemas-tab-header">{{ forloop.counter }}</td>
+              <td class="schemas-tab-border">
+                <a
+                  href="{% url 'schema_detail' schema_id=schema.id %}"
+                  class="text-blue"
+                >
+                  {{ schema.name }}
+                </a>
+              </td>
+              <td class="schemas-tab-border">{{ schema.modified|date:"Y-m-d" }}</td>
+              <td class="schemas-tab-border">
+                <a href="#" class="text-blue">Edit scheme</a>
+                <a href="{% url 'delete_schema' schema_id=schema.id %}" class="text-red pl-7">Delete</a>
+              </td >
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
