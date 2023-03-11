@@ -1,24 +1,22 @@
 $(document).ready(function() {
-    $('#generate-data-form').submit(function(event) {
-        event.preventDefault(); // Prevent the form from submitting normally
-        
-        // Send an AJAX request to the server
-        $.ajax({
-            url: '/generate-data/',
-            type: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(response) {
-                // Handle the response from the server
-                if (response.status === 'success') {
-                    alert(response.message);
-                } else {
-                    alert('Error generating data');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.log(error);
-            }
-        });
+    $("#generate-data-form").on("submit", function(event) {
+      event.preventDefault();
+      var form = $(this);
+      $.post(form.attr("action"), form.serialize(), function(response) {
+        generateDataset(response.dataset_id);
+      }).fail(function(xhr, status, error) {
+      });
     });
-});
+  });
+  
+  function generateDataset(datasetId) {
+    var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+    $.post("/generate-dataset/", {
+      csrfmiddlewaretoken: csrf_token,
+      dataset_id: datasetId
+    }, function(response) {
+      console.log(response);
+    }).fail(function(xhr, status, error) {
+      console.log(error);
+    });
+  }

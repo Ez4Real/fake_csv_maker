@@ -1,10 +1,29 @@
-{% block content %}
-<div>
-    <h2>Login</h2>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Login</button>
-    </form>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+    {% load tailwind_tags %}
+    {% tailwind_css %}
+  </head>
+  <body class="font-helvetica">
+    <div class="h-screen bg-white relative overflow-hidden">
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div class="bg-cover bg-center w-650 h-445">
+          <div class="bg-white w-full h-full border border-lgray rounded overflow-hidden relative flex justify-center items-center">
+            <form method="post" class="flex flex-col items-center mb-12">
+              {% csrf_token %}
+              <h1 class="text-dark text-4xl leading-[79px] font-thin mb-8">Login</h1>
+              <div class="my-4">
+                <input type="text" name="username" class="login-input base-field" placeholder="Username" />
+              </div>
+              <div class="my-4">
+                <input type="password" name="password" class="login-input base-field" placeholder="Password" />
+              </div>
+              <button type="submit" class="bg-blue py-2 px-6 text-white rounded cursor-pointer ml-auto">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

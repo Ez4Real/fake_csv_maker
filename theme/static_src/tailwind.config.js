@@ -43,6 +43,19 @@ module.exports = {
             fontFamily: {
                 helvetica: ['Helvetica Neue', 'sans-serif'],
               },
+            width: {
+                '650': '650px',
+                '84': '84px',
+                '%90': '90%',
+                '%44': '44%',
+                'p100': '100px',
+                'p92': '92px'
+            },
+            height: {
+                '445': '445px',
+                '38': '38px',
+                'p78': '78px'
+            },
         },
         colors: {
             black: '#000000',

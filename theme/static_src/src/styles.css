@@ -7,7 +7,7 @@
       @apply rounded bg-green border border-green text-white w-32 h-10 text-center leading-9 ml-auto;
     }
     .base-field {
-      @apply border border-fgray rounded-md;
+      @apply border border-fgray rounded h-38;
     }
     .schemas-tab-header{
       @apply font-bold border border-vlgray py-3 px-4 text-left;
@@ -26,5 +26,8 @@
     }
     .status-ready{
       @apply font-bold text-xs leading-6 rounded w-14 h-6 bg-green inline-block text-center text-white align-middle;
+    }
+    .login-input{
+      @apply w-80 placeholder-bgray;
     }
 }

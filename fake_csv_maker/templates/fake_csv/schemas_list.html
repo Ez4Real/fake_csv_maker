@@ -7,6 +7,7 @@
         <a href="{% url 'create_schema' %}" class="rounded bg-green border border-green text-white w-32 h-10 text-center leading-9 ml-auto">New schema</a>
     </div>
     
+    {% if schemas %}
     <table>
         <thead>
           <tr>
@@ -22,7 +23,7 @@
               <td class="schemas-tab-header">{{ forloop.counter }}</td>
               <td class="schemas-tab-border">
                 <a
-                  href="{% url 'schema_detail' schema_id=schema.id %}"
+                  href="{% url 'schema_detail' schema.id %}"
                   class="text-blue"
                 >
                   {{ schema.name }}
@@ -30,12 +31,17 @@
               </td>
               <td class="schemas-tab-border">{{ schema.modified|date:"Y-m-d" }}</td>
               <td class="schemas-tab-border">
-                <a href="#" class="text-blue">Edit scheme</a>
-                <a href="{% url 'delete_schema' schema_id=schema.id %}" class="text-red pl-7">Delete</a>
-              </td >
+                <a href="{% url 'edit_schema' schema.id %}" class="text-blue">Edit scheme</a>
+                <a href="{% url 'delete_schema' schema.id %}" class="text-red pl-7">Delete</a>
+              </td>
             </tr>
           {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <h2 class="border border-red rounded-md text-2xl text-center mt-8 mb-4 w-[986.95px] p-3">
+      You haven't created any data schema yet
+    </h2>
+    {% endif %}
 </div>
 {% endblock content %}

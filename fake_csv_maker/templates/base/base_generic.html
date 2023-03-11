@@ -20,11 +20,38 @@
   </header>
 
   <main>
+    {% if messages %}
+      <div class="flex justify-center">
+        <div class="w-1/2">
+          {% for message in messages %}
+            <div role="alert"
+            class="alert text-center p-4 rounded-lg border border-dark shadow-md
+                  {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    bg-green text-white
+                  {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    bg-red text-white
+                  {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                    bg-yellow text-white
+                  {% else %}
+                    bg-gray-500 text-white
+                  {% endif %}"
+            >
+            {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
     {% block content %}
     {% endblock %}
   </main>
 
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="{% static '/js/messagesDropdown.js' %}"></script>
   {% block scripts %}
+
   {% endblock %}
 
 </body>

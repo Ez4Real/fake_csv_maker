@@ -1,7 +1,11 @@
 const toggleField = (column) => {
-  const show = column.querySelector('.type-field').value === 'Integer' ? 'block' : 'none';
-  column.querySelector('.from-field-div').style.display = show;
-  column.querySelector('.to-field-div').style.display = show;
+  const { value: fieldType } = column.querySelector('.type-field');
+  const fromParent = column.querySelector('.from-field-div');
+  const toParent = column.querySelector('.to-field-div');
+  const [fromLabel, fromInput] = Array.from(fromParent.children);
+  const [toLabel, toInput] = Array.from(toParent.children);
+  const display = fieldType === 'Integer' ? 'block' : 'none';
+  [fromLabel, fromInput, toLabel, toInput].forEach(el => el.style.display = display);
 }
 
 const addColumnToggle = (column) => {

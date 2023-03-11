@@ -1,15 +1,18 @@
 from django import forms
 from django.forms import inlineformset_factory
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 from .models import DataSchemaColumn, \
     DataType, DataSchema, DataSet
+    
 
-
-SELECT_WG = forms.Select(attrs={'class': 'w-96 base-field'})
-NUMBER_INPUT = forms.NumberInput(attrs={'class': 'w-20 base-field'})
+SELECT_WG = forms.Select(attrs={'class': 'w-%44 base-field'})
+NUMBER_INPUT = forms.NumberInput(attrs={'class': 'w-84 base-field'})
 
 
 class DataSchemaForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-96 base-field'}))
+    name = forms.CharField(label='Name',
+                           widget=forms.TextInput(attrs={'class': 'w-%44 base-field'}))
     column_separator = forms.ChoiceField(choices=DataSchema.COLUMN_SEPARATOR_CHOICES,
                                          widget=SELECT_WG)
     string_character = forms.ChoiceField(choices=DataSchema.STRING_CHARACTER_CHOICES,
@@ -43,10 +46,12 @@ class DataSchemaColumnForm(forms.ModelForm):
     ]
         
     name = forms.CharField(label='Column name',
-                           widget=forms.TextInput(attrs={'class': 'base-field'}))
+                           widget=forms.TextInput(attrs={'class': 'base-field w-80'}))
     type = forms.ChoiceField(label='Type',
                              choices=type_choices,
-                             widget=forms.Select(attrs={'class': 'base-field type-field'}),
+                             widget=forms.Select(
+                                 attrs={'class': 'base-field type-field w-80'}
+                             ),
                              initial='')
     range_start = forms.IntegerField(label='From',
                                      widget=NUMBER_INPUT,
@@ -55,19 +60,21 @@ class DataSchemaColumnForm(forms.ModelForm):
                                    widget=NUMBER_INPUT,
                                    required=False)
     order = forms.IntegerField(label='Order',
-                               widget=forms.NumberInput(attrs={'class': 'w-40 base-field'}))
+                               widget=forms.NumberInput(attrs={'class': 'w-40 base-field'}),
+                               validators = [MinValueValidator(0)])
     
     class Meta:
         model = DataSchemaColumn
         fields = ['name', 'type', 'range_start', 'range_end', 'order']
         
 
-DataSchemaColumnFormSet = inlineformset_factory(DataSchema,
-                                                DataSchemaColumn,
-                                                form=DataSchemaColumnForm,
-                                                extra=1,
-                                                can_delete=True,
-                                                )
+DataSchemaColumnFormSet = inlineformset_factory(
+                            DataSchema,
+                            DataSchemaColumn,
+                            form=DataSchemaColumnForm,
+                            extra=1,
+                            can_delete=True,
+                          )
 
 
 class DataSetForm(forms.ModelForm):
@@ -79,7 +86,11 @@ class DataSetForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         records = self.fields['records']
         records.label = 'Rows'
-        records.widget.attrs.update({'class': 'base-field w-24 mr-2 ml-3'})
+        records.widget.attrs.update(
+            {'class': 'base-field w-24 mr-2 ml-3'}
+        )
+        records.validators = [MinValueValidator(1),
+                              MaxValueValidator(9999)]
     
     def save(self, schema, commit=True):
         instance = super().save(commit=False)

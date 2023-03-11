@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator
 
-
 class DataSchema(models.Model):
     COMMA = ","
     SEMICOLON = ";"
@@ -59,7 +58,9 @@ class DataSchemaColumn(models.Model):
     range_start = models.IntegerField(null=True, blank=True)
     range_end = models.IntegerField(null=True, blank=True)
     order = models.PositiveSmallIntegerField()
-    schema = models.ForeignKey(DataSchema, on_delete=models.CASCADE)
+    schema = models.ForeignKey(DataSchema,
+                               on_delete=models.CASCADE,
+                               related_name='columns')
     
     class Meta:
         constraints = [
@@ -73,6 +74,12 @@ class DataSchemaColumn(models.Model):
     def __str__(self):
         return self.name
     
+import os 
+import csv
+import random
+from faker import Faker
+from django.conf import settings
+
 
 class DataSet(models.Model):
     STATUS_READY = 'Ready'
@@ -88,9 +95,56 @@ class DataSet(models.Model):
     status = models.CharField(max_length=10,
                               choices=STATUS_CHOICES,
                               default=STATUS_PROCESSING)
-    records = models.IntegerField(default=500,
-                                  validators=[MaxValueValidator(9999)])
+    records = models.IntegerField(default=500)
     data_file = models.FileField(upload_to='generated_files/',
                                  max_length=100,
                                  blank=True,
                                  null=True)
+    
+    def create_csv(self):
+        schema_columns = DataSchemaColumn.objects.filter(schema=self.schema).order_by('order')
+        # Generate fake data for each column type
+        fake = Faker()
+        data = []
+        for row in range(self.records):
+            row = []
+            for col in schema_columns:
+                if col.type == DataType.FULL_NAME:
+                    row.append(fake.name())
+                elif col.type == DataType.JOB:
+                    row.append(fake.job())
+                elif col.type == DataType.EMAIL:
+                    row.append(fake.email())
+                elif col.type == DataType.DOMAIN:
+                    row.append(fake.domain_name())
+                elif col.type == DataType.PHONE_NUMBER:
+                    row.append(fake.phone_number())
+                elif col.type == DataType.COMPANY:
+                    row.append(fake.company())
+                elif col.type == DataType.TEXT:
+                    row.append(fake.text())
+                elif col.type == DataType.INTEGER:
+                    if col.range_start and col.range_end:
+                        row.append(str(random.randint(col.range_start, col.range_end)))
+                    else:
+                        row.append(str(random.randint(0, 999)))
+                elif col.type == DataType.ADDRESS:
+                    row.append(fake.address())
+                elif col.type == DataType.DATE:
+                    row.append(fake.date())
+            data.append(row)
+
+        # Write the data to a CSV file
+        filename = f'{self.schema.name}_{self.pk}.csv'
+        filepath = os.path.join(settings.MEDIA_ROOT, 'generated_files', filename)
+        
+        with open(filepath, 'w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file, delimiter=self.schema.column_separator, quoting=csv.QUOTE_MINIMAL, quotechar=self.schema.string_character)
+            header = [col.name for col in schema_columns]
+            writer.writerow(header)
+            writer.writerows(data)
+
+        # Update the data_file field
+        self.data_file = filepath
+        self.status = DataSet.STATUS_READY
+        self.save()
