@@ -34,7 +34,7 @@
         <form method="POST" id="generate-data-form">
           {% csrf_token %}
           {{ form }}
-          <button type="submit" class="green-btn" onclick="location.reload()">Generate data</button>
+          <button type="submit" class="green-btn">Generate data</button>
         </form>
     </div>
 
@@ -81,6 +81,6 @@
 {% block scripts %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="{% static '/js/messagesDropdown.js' %}"></script>
-<script src="{% static '/js/requests/datasetStatusUpdate.js' %}"></script>
+<!-- <script src="{% static '/js/requests/datasetStatusUpdate.js' %}"></script> -->
 <script src="{% static '/js/requests/generateDatasetReq.js' %}"></script>
 {% endblock %}

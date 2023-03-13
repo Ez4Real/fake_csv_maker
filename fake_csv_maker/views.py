@@ -1,4 +1,5 @@
 import os
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user
@@ -11,6 +12,9 @@ from .services.orm_requests import get_schemas_by_owner, \
     get_ordered_columns_by_schema, get_datasets_by_schema, \
     get_schema_by_id, get_dataset_by_id
 from .services.utils import get_file_response
+from .services.form_services import handle_form_errors, \
+    save_data_schema
+
 
 @login_required
 def create_schema(request):
@@ -19,57 +23,38 @@ def create_schema(request):
     form = DataSchemaForm(request.POST or None)
     formset = DataSchemaColumnFormSet(request.POST or None)
     if request.method == 'POST':
-        if not formset.cleaned_data[0]:
-            messages.error(request, 'At least one column is required.')
-            return redirect('create_schema')
         if form.is_valid() and formset.is_valid():
-            schema = form.save(current_user)
-            formset.instance = schema
-            formset.save()
+            schema = save_data_schema(form, formset,
+                                      current_user, request)
                     
             messages.success(request, f'{schema} data schema has been created successfully.')
             return redirect('schema_detail', schema_id=schema.id)
         else:
-            for error in form.non_field_errors():
-                messages.error(request, error)
-            for subform in formset:
-                for field, errors in subform.errors.items():
-                    for error in errors:
-                        messages.error(request, f'{subform.fields[field].label}: {error}')
+            handle_form_errors(form, formset, request)
             
     return render(request, 'fake_csv/schema_form.html', {'current_user': current_user,
                                                          'form': form, 
                                                          'formset': formset,
                                                          'is_edit': False})
-    
 
-from django.shortcuts import get_object_or_404
-from .models import DataSchema, DataSet
 
 @login_required
 def edit_schema(request, schema_id):
     current_user = get_user(request)
-    schema = get_object_or_404(DataSchema, pk=schema_id)
+    schema = get_schema_by_id(schema_id)
 
     form = DataSchemaForm(request.POST or None, instance=schema)
-    formset = DataSchemaColumnFormSet(request.POST or None,
-                                      instance=schema)
-    formset.forms.pop()
-
-    if form.is_valid() and formset.is_valid():
-        schema = form.save(commit=False)
-        schema.save()
-        formset.save()
-        
-        messages.success(request, f'{schema} data schema has been edited successfully.')
-        return redirect('schema_detail', schema_id=schema.id)
-    else:
-        print(formset.errors)
-        
-        for subform in formset:
-            for field, errors in subform.errors.items():
-                for error in errors:
-                    messages.error(request, f'{subform.fields[field].label}: {error}')
+    formset = DataSchemaColumnFormSet(request.POST or None, instance=schema)
+    
+    if request.method == 'POST':
+        if form.is_valid() and formset.is_valid():
+            schema = save_data_schema(form, formset,
+                                      current_user, request)
+            
+            messages.success(request, f'{schema} data schema has been edited successfully.')
+            return redirect('schema_detail', schema_id=schema.id)
+        else:
+            handle_form_errors(form, formset, request)
     
     return render(request, 'fake_csv/schema_form.html', {'current_user': current_user,
                                                          'form': form, 
@@ -93,30 +78,22 @@ def schema_detail(request, schema_id):
     related_columns = get_ordered_columns_by_schema(schema)
     related_datasets = get_datasets_by_schema(schema)
     
+    form = DataSetForm(request.POST or None)
+    
     if request.method == 'POST':
-        form = DataSetForm(request.POST)
-        print(form.is_valid())
         if form.is_valid():
-            
             dataset = form.save(schema)
             
             return JsonResponse({'dataset_id': dataset.id})
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    print(error)
-                    messages.error(request, error)
-            
-    
-    else:
-        form = DataSetForm()
+            return JsonResponse({'errors': form.errors}, status=400)
 
     return render(request, 'fake_csv/schema_detail.html', {'current_user': current_user,
                                                            'schema_id': schema_id,
                                                            'columns': related_columns,
                                                            'datasets': related_datasets,
                                                            'form': form})
-    
+
 
 @login_required
 def delete_schema(request, schema_id):
@@ -133,10 +110,9 @@ def generate_dataset(request):
         if dataset_id:
             dataset = get_dataset_by_id(dataset_id)
             dataset.create_csv()
-            
             return JsonResponse({'status': 'success', 'message': f'{dataset.schema} schema dataset has been generated'})
+    
     return JsonResponse({'status': 'error', 'message': 'Error generating dataset'})
-
 
 
 @login_required
@@ -146,12 +122,3 @@ def download_csv(request, file_path):
             response = get_file_response(file_path)
             return response
     raise Http404
-
-
-@login_required
-def get_dataset_status(request):
-    dataset_id = request.GET.get('dataset_id', None)
-    if dataset_id is not None:
-        dataset = get_object_or_404(DataSet, id=dataset_id)
-        return JsonResponse({'status': dataset.status})
-    return JsonResponse({'error': 'Missing dataset_id parameter'}, status=400)

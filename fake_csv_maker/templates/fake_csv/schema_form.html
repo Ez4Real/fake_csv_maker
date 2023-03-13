@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="cumtainer py-6 pl-16 w-full">
+<div class="con py-6 pl-16 w-full">
 
   <form method="post">
     {% csrf_token %}
@@ -53,7 +53,7 @@
         {% endfor %}
         </tbody>
       </table>
-      <div class="border border-lgray border-t-0 rounded px-4 pb-4 -mx-4 w-[1166.25px]">
+      <div class="border border-lgray border-t-0 rounded px-4 pb-4 -mx-4 w-[1056px]">
         <button type="button" class="add-column-btn rounded bg-blue text-white w-32 h-10">Add Column</button>
       </div>
       
@@ -69,4 +69,7 @@
 <script src="{% static '/js/messagesDropdown.js' %}"></script>
 <script src="{% static '/js/createSchema/updateFormColumns.js' %}"></script>
 <script src="{% static '/js/createSchema/toggleRangeFields.js' %}"></script>
+{% if is_edit %}
+<script>$('.add-column-btn').remove()</script>
+{% endif %}
 {% endblock %}

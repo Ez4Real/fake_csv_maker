@@ -1,4 +1,19 @@
 <tr class="formset-row{% if forloop.last %} last-form{% endif %}">
+
+  <!-- {% if is_edit %}
+    {% load unique_id %}
+    {% generate_unique_id as uuid %}
+
+    {% if form.id %}
+      {{ form.id }}
+    {% else %}
+    <input type="hidden" name="columns-{{ uuid }}-id" value="{{ uuid }}" id="id_columns-{{ uuid }}-id">
+    {% endif %}
+
+  {{ my_uuid }}
+  {% endif %} -->
+  {{ form.DELETE }}
+  <td>{{ form.id }}</td>
   <td class="py-2">
     <label class="block mb-2" for="{{ form.column_name.id_for_label }}">{{ form.column_name.label }}</label>
     {{ form.column_name }}

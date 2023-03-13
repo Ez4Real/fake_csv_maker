@@ -9,6 +9,4 @@ urlpatterns = [
     path('delete-schema/<int:schema_id>/', views.delete_schema, name='delete_schema'),
     path('dataset-download/<str:file_path>/', views.download_csv, name='download_csv'),
     path('generate-dataset/', views.generate_dataset, name='generate-dataset'),
-    
-    path('api/get_dataset_status/', views.get_dataset_status, name='get_dataset_status'),
 ]

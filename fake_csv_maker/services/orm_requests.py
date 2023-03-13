@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from ..models import DataSchema, DataSchemaColumn, DataSet
 
-
 def get_schemas_by_owner(owner: User) -> List[DataSchema]:
     '''
     Returns a queryset of DataSchema
