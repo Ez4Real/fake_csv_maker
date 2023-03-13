@@ -32,15 +32,15 @@ The following are the endpoints that are available in the project:
 8. Run the server using the ```python manage.py runserver``` command.
 9. Access the application in your browser at **http://localhost:8000/**
 
-##Usage
+## Usage
 1. Log in to the application.
 2. Create a new data schema.
 3. Add columns to the data schema.
 4. Generate a dataset using the generated schema and the specified number of rows.
 5. Download the generated CSV file.
 
-##Contributing
+## Contributing
 Contributions to the project are not welcome. Developed exclusively for personal purposes and for general development
 
-##Credits
+## Credits
 This project was developed by Yevheij. Feel free to contact me at __butilka05roma@gmail.com__ for any queries or feedback.
