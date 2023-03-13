@@ -21,7 +21,7 @@
           {% for column in columns %}
             <tr>
               <td class="schemaDetail-tab-header">{{ forloop.counter }}</td>
-              <td class="schemaDetail-tab-border">{{ column.name }}</td>
+              <td class="schemaDetail-tab-border">{{ column.column_name }}</td>
               <td class="schemaDetail-tab-border">{{ column.type }}</td>
             </tr>
           {% endfor %}
@@ -79,6 +79,8 @@
 {% endblock content %}
 
 {% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static '/js/messagesDropdown.js' %}"></script>
 <script src="{% static '/js/requests/datasetStatusUpdate.js' %}"></script>
 <script src="{% static '/js/requests/generateDatasetReq.js' %}"></script>
 {% endblock %}

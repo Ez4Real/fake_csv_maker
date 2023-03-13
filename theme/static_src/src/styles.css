@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+    .last-form {
+      @apply border border-lgray border-b-0 rounded p-4 pb-2 -mx-4 mt-6 flex flex-row items-center;
+    }
     .green-btn {
       @apply rounded bg-green border border-green text-white w-32 h-10 text-center leading-9 ml-auto;
     }

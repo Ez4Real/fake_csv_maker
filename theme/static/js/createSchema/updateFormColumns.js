@@ -1,54 +1,38 @@
-const totalFormsInput = document.querySelector('#id_form-TOTAL_FORMS');
-const formsetContainer = totalFormsInput.parentNode;
-const addButton = formsetContainer.querySelector('button[name="add-column-btn"]');
-const initialForm = formsetContainer.querySelector('.initial-form');
-const formTemplate = initialForm.cloneNode(true);
-initialForm.querySelector('button[id="delete-column-btn"]').remove()
+$(function() {
+  const formset = $('#formset tbody')
+  const lastForm = $('#formset tbody .last-form');
+  const formTemplate = lastForm.clone(true)
+  lastForm.find('.delete-column-btn').remove();
+  const maxForms = parseInt($('#id_columns-MAX_NUM_FORMS').val())
+  let totalForms = parseInt($('#id_columns-TOTAL_FORMS').val())
 
-function updateForm(form, index) {
-  const inputs = form.querySelectorAll('input, select');
-  inputs.forEach((input) => {
-    ['name', 'id'].forEach((attr) => {
-      input.setAttribute(attr, input.getAttribute(attr).replace(/-\d+-/, `-${index}-`));
-    });
-  });
-  const deleteBtn = form.querySelector('#delete-column-btn');
-  deleteBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (confirm('Are you sure you want to delete this column?')) {
-      deleteForm(form);
-    }
-  });
-}
+  const addForm = () => {
+    const formsetCount = formset.children('.formset-row').length
+    if (formsetCount >= maxForms) return
 
-function deleteForm(form) {
-  form.remove();
-  totalFormsInput.value = parseInt(totalFormsInput.value) - 1;
-}
+    const newForm = formTemplate.clone(true).removeClass('last-form')
 
-function resetForm(form) {
-  const inputs = form.querySelectorAll('input, select');
-  inputs.forEach((input) => {
-    if (input.nodeName === 'SELECT') {
-      input.selectedIndex = 0;
-    } else {
-      input.value = input.defaultValue;
-    }
-  });
-}
+    newForm.find('input, select').each(function(index, input) {
+      const inputName = $(input).attr('name').replace(/-\d+/, '-' + formsetCount)
+      const lastInput = lastForm.find('[name="'+$(input).attr('name')+'"]')
+      $(input).attr({'name': inputName, 'id': 'id_' + inputName}).val(lastInput.val())
+    })
 
-addButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  const totalFormsNum = parseInt(totalFormsInput.value);
-  const newForm = formTemplate.cloneNode(true);
-  newForm.classList.remove('initial-form');
-  updateForm(newForm, totalFormsNum);
-  totalFormsInput.value = totalFormsNum + 1;
-  formsetContainer.insertBefore(newForm, addButton.parentNode);
-  const newFormInputs = newForm.querySelectorAll('input, select');
-  const starterFormInputs = initialForm.querySelectorAll('input, select');
-  newFormInputs.forEach((input, index) => {
-    input.value = starterFormInputs[index].value;
-  });
-  resetForm(initialForm);
-});
+    lastForm.find('input, select').each(function(index, input) {
+      input.nodeName === 'SELECT' ? input.selectedIndex = 0 : input.value = ''
+    })
+    addRangesToggle(lastForm[0])
+
+    $('#formset .formset-row:not(".formset-initial"):last').before(newForm)
+    
+    addRangesToggle(newForm[0])
+
+  }
+
+  $('.add-column-btn').on('click', addForm);
+
+  formset.on('click', '.delete-column-btn', function() {
+    $(this).closest('.formset-row').remove()
+    $('#id_columns-TOTAL_FORMS').val(--totalForms)
+  })
+})

@@ -6,13 +6,13 @@ from .models import DataSchemaColumn, \
     DataType, DataSchema, DataSet
     
 
-SELECT_WG = forms.Select(attrs={'class': 'w-%44 base-field'})
+SELECT_WG = forms.Select(attrs={'class': 'w-%38 base-field'})
 NUMBER_INPUT = forms.NumberInput(attrs={'class': 'w-84 base-field'})
 
 
 class DataSchemaForm(forms.ModelForm):
     name = forms.CharField(label='Name',
-                           widget=forms.TextInput(attrs={'class': 'w-%44 base-field'}))
+                           widget=forms.TextInput(attrs={'class': 'w-%38 base-field'}))
     column_separator = forms.ChoiceField(choices=DataSchema.COLUMN_SEPARATOR_CHOICES,
                                          widget=SELECT_WG)
     string_character = forms.ChoiceField(choices=DataSchema.STRING_CHARACTER_CHOICES,
@@ -45,12 +45,13 @@ class DataSchemaColumnForm(forms.ModelForm):
         (DataType.DATE, 'Date'),
     ]
         
-    name = forms.CharField(label='Column name',
-                           widget=forms.TextInput(attrs={'class': 'base-field w-80'}))
+    column_name = forms.CharField(label='Column name',
+                                  widget=forms.TextInput(attrs={'class': 'base-field w-80'}),
+                                  required=True)
     type = forms.ChoiceField(label='Type',
                              choices=type_choices,
                              widget=forms.Select(
-                                 attrs={'class': 'base-field type-field w-80'}
+                                 attrs={'class': 'base-field type-field w-80 leading-4'}
                              ),
                              initial='')
     range_start = forms.IntegerField(label='From',
@@ -61,11 +62,10 @@ class DataSchemaColumnForm(forms.ModelForm):
                                    required=False)
     order = forms.IntegerField(label='Order',
                                widget=forms.NumberInput(attrs={'class': 'w-40 base-field'}),
-                               validators = [MinValueValidator(0)])
-    
+                               validators = [MinValueValidator(0)])    
     class Meta:
         model = DataSchemaColumn
-        fields = ['name', 'type', 'range_start', 'range_end', 'order']
+        exclude = ['schema']
         
 
 DataSchemaColumnFormSet = inlineformset_factory(
@@ -73,7 +73,6 @@ DataSchemaColumnFormSet = inlineformset_factory(
                             DataSchemaColumn,
                             form=DataSchemaColumnForm,
                             extra=1,
-                            can_delete=True,
                           )
 
 
@@ -90,7 +89,7 @@ class DataSetForm(forms.ModelForm):
             {'class': 'base-field w-24 mr-2 ml-3'}
         )
         records.validators = [MinValueValidator(1),
-                              MaxValueValidator(9999)]
+                              MaxValueValidator(250000)]
     
     def save(self, schema, commit=True):
         instance = super().save(commit=False)

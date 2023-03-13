@@ -1,0 +1,72 @@
+{% extends "base/base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<div class="cumtainer py-6 pl-16 w-full">
+
+  <form method="post">
+    {% csrf_token %}
+    
+
+    <div class="flex mt-2 w-%90">
+      <h2 class="font-medium text-2xl">{% if is_edit %}Edit{% else %}New{% endif %} schema</h2>
+      <button type="submit" class="rounded bg-blue text-white w-20 h-10 ml-auto">Submit</button>
+    </div>
+
+    <fieldset>
+      <div class="flex flex-col">
+        <p class="my-2">
+          <label class="block mb-2" for="{{ form.name.id_for_label }}">
+            {{ form.name.label }}
+          </label>
+          {{ form.name }}
+        </p>
+      </div>
+      <div class="flex flex-col">
+        <p class="my-2">
+          <label class="block mb-2" for="{{ form.column_separator.id_for_label }}">
+            {{ form.column_separator.label }}
+          </label>
+          {{ form.column_separator }}
+        </p>
+      </div>
+      <div class="flex flex-col">
+        <p class="my-2">
+          <label class="block mb-2" for="{{ form.string_character.id_for_label }}">
+            {{ form.string_character.label }}
+          </label>
+          {{ form.string_character }}
+        </p>
+      </div>
+    </fieldset>
+
+      
+    <div class="mx-4">
+      <h2 class="font-medium text-2xl py-5">Schema columns</h2>
+
+      <table id="formset">
+        
+        <tbody id="table-body-id" class="block">
+        {{ formset.management_form }}
+        {% for form in formset.forms %}
+          {% include 'fake_csv/create_schema/schema_column.html' %}
+        {% endfor %}
+        </tbody>
+      </table>
+      <div class="border border-lgray border-t-0 rounded px-4 pb-4 -mx-4 w-[1166.25px]">
+        <button type="button" class="add-column-btn rounded bg-blue text-white w-32 h-10">Add Column</button>
+      </div>
+      
+    </div>
+      
+  </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static '/js/messagesDropdown.js' %}"></script>
+<script src="{% static '/js/createSchema/updateFormColumns.js' %}"></script>
+<script src="{% static '/js/createSchema/toggleRangeFields.js' %}"></script>
+{% endblock %}

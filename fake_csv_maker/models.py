@@ -53,7 +53,7 @@ class DataType(models.TextChoices):
 
 
 class DataSchemaColumn(models.Model):
-    name = models.CharField(max_length=255)
+    column_name = models.CharField(max_length=255)
     type = models.CharField(max_length=255, choices=DataType.choices)
     range_start = models.IntegerField(null=True, blank=True)
     range_end = models.IntegerField(null=True, blank=True)
@@ -72,7 +72,7 @@ class DataSchemaColumn(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return self.column_name
     
 import os 
 import csv
@@ -139,8 +139,11 @@ class DataSet(models.Model):
         filepath = os.path.join(settings.MEDIA_ROOT, 'generated_files', filename)
         
         with open(filepath, 'w', newline='', encoding='utf-8') as file:
-            writer = csv.writer(file, delimiter=self.schema.column_separator, quoting=csv.QUOTE_MINIMAL, quotechar=self.schema.string_character)
-            header = [col.name for col in schema_columns]
+            writer = csv.writer(file,
+                                delimiter=self.schema.column_separator,
+                                quoting=csv.QUOTE_MINIMAL,
+                                quotechar=self.schema.string_character)
+            header = [col.column_name for col in schema_columns]
             writer.writerow(header)
             writer.writerows(data)
 

@@ -13,4 +13,4 @@ function updateStatus() {
     }
     
 }
-setInterval(updateStatus, 3000);
+setInterval(updateStatus, 6000);
