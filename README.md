@@ -11,7 +11,7 @@ The Data Schema Generator project allows users to create any number of data sche
 ## Endpoints
 The following are the endpoints that are available in the project:
 
-- **login/** : The login page where users can log in to the application.
+- ![#1589F0]**login/**`#1589F0` : The login page where users can log in to the application.
 - **logout/** : The logout page where users can log out of the application.
 - **/** : The page where users can create a new data schema.
 - **schemas/** : The page that lists all the created data schemas.
