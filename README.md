@@ -11,15 +11,15 @@ The Data Schema Generator project allows users to create any number of data sche
 ## Endpoints
 The following are the endpoints that are available in the project:
 
-- **login/**: The login page where users can log in to the application.
-- **logout/**: The logout page where users can log out of the application.
-- **/**: The page where users can create a new data schema.
-- **schemas/**: The page that lists all the created data schemas.
-- **schema-detail/<int:schema_id>/**: The page that displays the details of a specific data schema.
-- **edit-schema/<int:schema_id>/**: The page where users can edit an existing data schema.
-- **delete-schema/<int:schema_id>/**: The page where users can delete an existing data schema.
-- **dataset-download/<str:file_path>/**: The page where users can download a CSV file containing the generated data.
-- **generate-dataset/**: The endpoint that generates the dataset.
+- **login/** : The login page where users can log in to the application.
+- **logout/** : The logout page where users can log out of the application.
+- **/** : The page where users can create a new data schema.
+- **schemas/** : The page that lists all the created data schemas.
+- **schema-detail/<int:schema_id>/** : The page that displays the details of a specific data schema.
+- **edit-schema/<int:schema_id>/** : The page where users can edit an existing data schema.
+- **delete-schema/<int:schema_id>/** : The page where users can delete an existing data schema.
+- **dataset-download/<str:file_path>/** : The page where users can download a CSV file containing the generated data.
+- **generate-dataset/** : The endpoint that generates the dataset.
 
 ## Installation
 1. Clone the repository
