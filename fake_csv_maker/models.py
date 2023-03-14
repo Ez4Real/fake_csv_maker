@@ -121,7 +121,7 @@ class DataSet(models.Model):
         
         data = generate_fake_data(schema_columns, self.records, DataType)
 
-        filename = f'{self.schema.name}_{self.pk}.csv'
+        filename = f'{self.schema.name}_{self.pk}.csv'.replace(' ', '_')
         filepath = os.path.join(settings.MEDIA_ROOT, 'generated_files', filename)
         
         write_csv_file(schema_columns, data, filepath,

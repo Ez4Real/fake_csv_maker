@@ -38,13 +38,13 @@ function generateDataset(datasetId) {
       },
       async: true,
       success: function(response) {
-          setTimeout(function() {
-              console.log(response)
-              location.reload()
-          }, 2000)
+        setTimeout(function() {
+            location.reload()
+        }, 2000)
       },
       error: function(xhr, status, error) {
-        console.log(response);
+        var response = JSON.parse(xhr.responseText)
+        displayErrors(response.errors)
       }
   })
 }

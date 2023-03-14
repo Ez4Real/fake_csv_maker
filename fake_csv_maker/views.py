@@ -116,7 +116,8 @@ def generate_dataset(request):
 
 
 @login_required
-def download_csv(request, file_path):
+def download_csv(request, dataset_id):
+    file_path = str(get_dataset_by_id(dataset_id).data_file)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:
             response = get_file_response(file_path)
