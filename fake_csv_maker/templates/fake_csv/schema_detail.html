@@ -60,7 +60,7 @@
             </td>
               <td class="schemas-tab-border">
                 {% if dataset.status == 'Ready' %}
-                <a href="{% url 'download_csv' dataset.id %}" class="text-blue">Download</a>
+                <a href="{{ dataset.data_file }}" class="text-blue">Download</a>
                 {% endif %}
               </td >
             </tr>

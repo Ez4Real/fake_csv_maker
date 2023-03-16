@@ -1,12 +1,9 @@
-import os 
-
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from .services.generate_CSV import write_csv_file, \
-    generate_fake_data
+from .services.generate_CSV import upload_csv_file, \
+    generate_fake_data, generate_csv_data
     
 
 class DataSchema(models.Model):
@@ -96,6 +93,7 @@ class DataSchemaColumn(models.Model):
             raise ValidationError({'order': msg, 'schema': msg})
         return cleaned_data
 
+
 class DataSet(models.Model):
     STATUS_READY = 'Ready'
     STATUS_PROCESSING = 'Processing'
@@ -111,24 +109,23 @@ class DataSet(models.Model):
                               choices=STATUS_CHOICES,
                               default=STATUS_PROCESSING)
     records = models.IntegerField(default=500)
-    data_file = models.FileField(upload_to='generated_files/',
-                                 max_length=100,
-                                 blank=True,
-                                 null=True)
+    data_file = models.URLField(max_length=255,
+                                blank=True,
+                                null=True)
+    
     
     def create_csv(self):
-        schema_columns = DataSchemaColumn.objects.filter(schema=self.schema).order_by('order')
-        
+        '''
+        Creates a CSV file based on the schema of this dataset.
+        '''
+        schema_columns = DataSchemaColumn.objects.filter(schema=self.schema).order_by('order')    
         data = generate_fake_data(schema_columns, self.records, DataType)
-
-        filename = f'{self.schema.name}_{self.pk}.csv'.replace(' ', '_')
-        filepath = os.path.join(settings.MEDIA_ROOT, 'generated_files', filename)
+        csv_data = generate_csv_data(schema_columns, data,
+                                     self.schema.column_separator,
+                                     self.schema.string_character)
+        upload_csv_file(self, csv_data, self.schema.name, self.pk)
         
-        write_csv_file(schema_columns, data, filepath,
-                       column_separator=self.schema.column_separator,
-                       string_character=self.schema.string_character)
-
-        self.data_file = filepath
         self.status = DataSet.STATUS_READY
         self.save()
         
+

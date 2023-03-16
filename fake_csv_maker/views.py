@@ -71,6 +71,7 @@ def schemas_list(request):
     return render(request, 'fake_csv/schemas_list.html', {'current_user': current_user,
                                                           'schemas': user_schemas})
     
+    
 @login_required
 def schema_detail(request, schema_id):
     current_user = get_user(request)
@@ -115,11 +116,11 @@ def generate_dataset(request):
     return JsonResponse({'status': 'error', 'message': 'Error generating dataset'})
 
 
-@login_required
-def download_csv(request, dataset_id):
-    file_path = str(get_dataset_by_id(dataset_id).data_file)
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as fh:
-            response = get_file_response(file_path)
-            return response
-    raise Http404
+# @login_required
+# def download_csv(request, dataset_id):
+#     file_path = str(get_dataset_by_id(dataset_id).data_file)
+#     if os.path.exists(file_path):
+#         with open(file_path, 'rb') as fh:
+#             response = get_file_response(file_path)
+#             return response
+#     raise Http404
