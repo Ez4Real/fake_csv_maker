@@ -103,9 +103,10 @@ def upload_csv_file(instance,
     '''
     filename = f'{schema_name}_{id}.csv'.replace(' ', '_')
     cloudinary_file: Dict[str, Any] = uploader.upload(csv_data,
-                                    public_id=filename,
-                                    resource_type="raw",
-                                    folder=settings.STORE_CSV_FOLDER)
+                                                      public_id=filename,
+                                                      resource_type="raw",
+                                                      folder=settings.STORE_CSV_FOLDER)
     instance.data_file, _ = cloudinary_url(cloudinary_file['public_id'],
-                                    resource_type=cloudinary_file['resource_type'],
-                                    folder=settings.STORE_CSV_FOLDER)
+                                           resource_type=cloudinary_file['resource_type'],
+                                           folder=settings.STORE_CSV_FOLDER,
+                                           secure=True)
