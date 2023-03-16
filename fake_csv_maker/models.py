@@ -127,5 +127,3 @@ class DataSet(models.Model):
         
         self.status = DataSet.STATUS_READY
         self.save()
-        
-

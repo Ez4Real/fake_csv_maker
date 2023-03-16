@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'fake_csv_maker',
     'tailwind',
     'theme',
-    
     'cloudinary_storage',
     'cloudinary',
     

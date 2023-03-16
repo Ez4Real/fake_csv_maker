@@ -1,5 +1,3 @@
-import os
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user
@@ -11,7 +9,7 @@ from .forms import DataSchemaColumnFormSet, DataSetForm, \
 from .services.orm_requests import get_schemas_by_owner, \
     get_ordered_columns_by_schema, get_datasets_by_schema, \
     get_schema_by_id, get_dataset_by_id
-from .services.utils import get_file_response
+# from .services.utils import get_file_response
 from .services.form_services import handle_form_errors, \
     save_data_schema
 
